@@ -9,6 +9,14 @@
 
 
 " ====================
+" ====== bugs  =======
+" ====================
+"
+" 执行:source $MYVIMRC<CR> 时coc的reference会实化
+" html文件运行有问题
+
+
+" ====================
 " === Editor Setup ===
 " ====================
 
@@ -65,44 +73,40 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 
 " Compile function
-noremap b :call InitCompile()<CR>
-func! InitCompile()
-	if &filetype == 'c'
-		exec "!g++ % -o %<"
-	elseif &filetype == 'cpp'
-		exec "!g++ -std=c++11 % -o %<"
-	elseif &filetype == 'java' 
-		exec "!javac %" 
-	elseif &filetype == 'sh'
-		:!./%
-	endif
-endfunc
-
 noremap r :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
+		exec "!g++ % -o %<"
 		exec "!time ./%<"
 	elseif &filetype == 'cpp'
 		set splitbelow
-		:sp 
+		exec "!g++ -std=c++11 % -Wall -o %<"
+		:sp
 		:res -15
-		:term clear && time ./%<
-	elseif &filetype == 'java' 
-		exec "!clear && time java %<"
-	elseif &filetype == 'python' 
+		:term time ./%<
+	elseif &filetype == 'java'
+		exec "!javac %"
+		exec "!time java %<"
+	elseif &filetype == 'sh'
+		:!time bash %
+	elseif &filetype == 'python'
 		set splitbelow
 		:sp
 		:term time python3 %
 	elseif &filetype == 'html'
 		exec "!google-chrome % &"
-	elseif &filetype == 'sh'
-		:!./%
 	elseif &filetype == 'markdown'
 		exec "MarkdownPreview"
+	elseif &filetype == 'tex'
+		silent! exec "VimtexStop"
+		silent! exec "VimtexCompile"
+	elseif &filetype == 'go'
+		set splitbelow
+		:sp
+		:term go run %
 	endif
 endfunc
-
 
 
 "按<F2>自动生成代码设置
@@ -183,7 +187,18 @@ noremap R :source $MYVIMRC<CR>
 "search
 noremap <LEADER><CR> :nohlsearch<CR>
 
+" make Y to copy till the end of the line
+nnoremap Y y$
 
+" Copy to system clipboard
+vnoremap Y "+y
+
+" Indentation
+nnoremap < <<
+nnoremap > >>
+
+" Folding  暂时没搞懂
+noremap <silent> <LEADER>o za
 
 " ===
 " === Window management    分屏
@@ -386,8 +401,8 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Use D to show documentation in preview window
+nnoremap <silent> D :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -397,7 +412,7 @@ function! s:show_documentation()
   endif
 endfunction
 
-" Highlight symbol under cursor on CursorHold 高亮引用，慎用！
+" Highlight symbol under cursor on CursorHold 搞不懂干嘛的
 "autocmd CursorHold * silent call CocActionAsync('highlight')
 "
 " Remap for rename current word 重命名（同时更改所以引用）

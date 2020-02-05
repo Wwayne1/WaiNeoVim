@@ -259,8 +259,15 @@ noremap <LEADER>/ :set splitbelow<CR>:sp<CR>:term<CR>
 
 call plug#begin('~/.config/nvim/plugged')
 
+"Plug 'theniceboy/eleline.vim'
 Plug 'vim-airline/vim-airline'
+Plug 'luochen1990/rainbow'
+"Plug 'bling/vim-bufferline'
+Plug 'ryanoasis/vim-devicons'
+
+" colors
 Plug 'connorholyday/vim-snazzy'
+"Plug 'ajmwagar/vim-deus'
 
 " Taglist
 Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
@@ -268,13 +275,27 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
 " Undo Tree
 Plug 'mbbill/undotree'
 
+" Git
+Plug 'airblade/vim-gitgutter'
+
 " Code Editing
 Plug 'easymotion/vim-easymotion'
 Plug 'scrooloose/nerdcommenter' " in <leader>c<space> to comment a block
 Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
+Plug 'jiangmiao/auto-pairs'
+
+" Genreal Highlighter
+Plug 'jaxbot/semantic-highlight.vim'
+"Plug 'chrisbra/Colorizer' " Show colors with :ColorHighlight
 
 " File navigation
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" Error checking
+"Plug 'fszymanski/fzf-quickfix', {'on': 'Quickfix'}
 
 " Auto Complete
 "Plug 'Valloric/YouCompleteMe'
@@ -287,6 +308,9 @@ Plug 'honza/vim-snippets'
 " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install_sync() }, 'for' :['markdown', 'vim-plug'] }
 Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
+
+" Formatter
+"Plug 'Chiel92/vim-autoformat'
 
 " Mini Vim-APP
 Plug 'mhinz/vim-startify'
@@ -305,13 +329,39 @@ source ~/.config/nvim/_machine_specific.vim
 
 
 "connorholyday/vim-snazzy
-let g:SnazzyTransparent = 1   "背景透明化
+let g:SnazzyTransparent = 1  "背景透明化
 color snazzy
+
+" ===
+" === semantic-highlight.
+" ===
+:nnoremap <Leader>s :SemanticHighlightToggle<cr>
+
+" ===
+" === rainbow
+" ===
+let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
 " ===
 " === NERDTree
 " ===
 noremap ff :NERDTreeToggle<CR>
+
+" ===
+" === NERDTree-Git
+" ===
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ "Unknown"   : "?"
+    \ }
+"let g:NERDTreeShowIgnoredStatus = 1
 
 " ===
 " === Undotree
@@ -336,7 +386,12 @@ map <silent> T :TagbarOpenAutoClose<CR>
 " ===
 " === Esaymotion
 " ===
-nmap ss <Plug>(easymotion-s2)
+"nmap ss <Plug>(easymotion-s2)
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_do_shade = 0
+let g:EasyMotion_smartcase = 1
+map ' <Plug>(easymotion-bd-f)
+nmap ' <Plug>(easymotion-bd-f)
 
 " ===
 " === MarkdownPreview
@@ -370,6 +425,18 @@ let g:mkdp_page_title = '「${name}」'
 "let g:ycm_autoclose_preview_window_after_completion=0
 "let g:ycm_autoclose_preview_window_after_insertion=1
 "let g:ycm_use_clangd = 0
+
+" ==
+" == GitGutter
+" ==
+let g:gitgutter_map_keys = 0
+let g:gitgutter_override_sign_column_highlight = 0
+let g:gitgutter_preview_win_floating = 1
+autocmd BufWritePost * GitGutter
+nnoremap <LEADER>gf :GitGutterFold<CR>
+nnoremap H :GitGutterPreviewHunk<CR>
+nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
+nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 
 " ===
 " === coc
@@ -414,14 +481,77 @@ endfunction
 
 " Highlight symbol under cursor on CursorHold 搞不懂干嘛的
 "autocmd CursorHold * silent call CocActionAsync('highlight')
-"
-" Remap for rename current word 重命名（同时更改所以引用）
+
+" Remap for rename current word 重命名（同时更改所有引用）
 nmap <leader>rn <Plug>(coc-rename)
 
 " ===
 " === vim-table-mode
 " ===
 noremap <LEADER>tm :TableModeToggle<CR>
+
+" ===
+" === FZF
+" ===
+noremap <C-p> :FZF<CR>
+noremap <C-f> :Ag<CR>
+noremap <C-h> :MRU<CR>
+noremap <C-t> :BTags<CR>
+noremap <C-l> :LinesWithPreview<CR>
+noremap <C-w> :Buffers<CR>
+noremap <C-m> :Marks<CR>
+noremap q; :History:<CR>
+
+autocmd! FileType fzf
+autocmd  FileType fzf set laststatus=0 noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 ruler
+
+command! -bang -nargs=* Buffers
+  \ call fzf#vim#buffers(
+  \   '',
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:0%', '?'),
+  \   <bang>0)
+
+
+"查找当前文件某行
+command! -bang -nargs=* LinesWithPreview
+    \ call fzf#vim#grep(
+    \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+    \   fzf#vim#with_preview({}, 'up:50%', '?'),
+    \   1)
+
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(
+  \   '',
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%', '?'),
+  \   <bang>0)
+
+
+command! -bang -nargs=* MRU call fzf#vim#history(fzf#vim#with_preview())
+
+command! -bang BTags
+  \ call fzf#vim#buffer_tags('', {
+  \     'down': '40%',
+  \     'options': '--with-nth 1 
+  \                 --reverse 
+  \                 --prompt "> " 
+  \                 --preview-window="70%" 
+  \                 --preview "
+  \                     tail -n +\$(echo {3} | tr -d \";\\\"\") {2} |
+  \                     head -n 16"'
+  \ })
+
+" ===
+" === AutoFormat
+" ===
+"nnoremap \f :Autoformat<CR>
+
+" ===
+" === fzf-quickfix
+" ===
+"nnoremap <c-q> :Quickfix!<CR>
 
 " ===================== End of Plugin Settings =====================
 

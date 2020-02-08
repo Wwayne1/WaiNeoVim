@@ -277,6 +277,7 @@ Plug 'mbbill/undotree'
 
 " Git
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 " Code Editing
 Plug 'easymotion/vim-easymotion'
@@ -331,6 +332,12 @@ source ~/.config/nvim/_machine_specific.vim
 "connorholyday/vim-snazzy
 let g:SnazzyTransparent = 1  "背景透明化
 color snazzy
+
+" ===
+" === vim-airline
+" ===
+let g:airline#extensions#branch#enabled=1
+let g:airline#extensions#hunks#enabled=1
 
 " ===
 " === semantic-highlight.

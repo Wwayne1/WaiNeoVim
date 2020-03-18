@@ -269,6 +269,9 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'connorholyday/vim-snazzy'
 "Plug 'ajmwagar/vim-deus'
 
+" input method
+Plug 'lyokha/vim-xkbswitch'
+
 " Taglist
 Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
 
@@ -315,6 +318,7 @@ Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 
 " Mini Vim-APP
 Plug 'mhinz/vim-startify'
+"Plug 'makerj/vim-pdf'
 
 call plug#end()
 
@@ -348,6 +352,11 @@ let g:airline#extensions#hunks#enabled=1
 " === rainbow
 " ===
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+
+" ===
+" === vim-xkbswitch
+" ===
+let g:XkbSwitchEnabled = 1
 
 " ===
 " === NERDTree

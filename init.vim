@@ -31,7 +31,7 @@ set mouse=a           "使用鼠标
 set encoding=utf-8
 
 "nvim默认位置
-cd /Users/wayne/code
+"cd /Users/wayne/code/golang/src/giligili
 
 " ===
 " === Editor behavior
@@ -104,7 +104,7 @@ func! CompileRunGcc()
 	elseif &filetype == 'go'
 		set splitbelow
 		:sp
-		:term go run %
+		:term go run .
 	endif
 endfunc
 
@@ -170,6 +170,9 @@ endif
 " Set <LEADER> as <SPACE>
 let mapleader=" "
 
+" Open the vimrc file anytime
+noremap <LEADER>rc :e ~/.config/nvim/init.vim<CR>
+
 " Open Startify
 noremap <LEADER>st :Startify<CR>
 
@@ -197,8 +200,12 @@ vnoremap Y "+y
 nnoremap < <<
 nnoremap > >>
 
-" Folding  暂时没搞懂
+" Folding  折叠
 noremap <silent> <LEADER>o za
+
+" Open up lazygit
+noremap \g :Git 
+noremap <c-g> :tabe<CR>:-tabmove<CR>:term lazygit<CR>
 
 " ===
 " === Window management    分屏
@@ -259,10 +266,10 @@ noremap <LEADER>/ :set splitbelow<CR>:sp<CR>:term<CR>
 
 call plug#begin('~/.config/nvim/plugged')
 
-"Plug 'theniceboy/eleline.vim'
-Plug 'vim-airline/vim-airline'
+Plug 'theniceboy/eleline.vim'
+"Plug 'vim-airline/vim-airline'
 Plug 'luochen1990/rainbow'
-"Plug 'bling/vim-bufferline'
+Plug 'bling/vim-bufferline'
 Plug 'ryanoasis/vim-devicons'
 
 " colors
@@ -273,7 +280,8 @@ Plug 'connorholyday/vim-snazzy'
 Plug 'lyokha/vim-xkbswitch'
 
 " Taglist
-Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
+Plug 'liuchengxu/vista.vim'
+"Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
 
 " Undo Tree
 Plug 'mbbill/undotree'
@@ -293,10 +301,10 @@ Plug 'jaxbot/semantic-highlight.vim'
 "Plug 'chrisbra/Colorizer' " Show colors with :ColorHighlight
 
 " File navigation
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+"Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+"Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Error checking
 "Plug 'fszymanski/fzf-quickfix', {'on': 'Quickfix'}
@@ -317,8 +325,52 @@ Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 "Plug 'Chiel92/vim-autoformat'
 
 " Mini Vim-APP
+"Plug 'hardcoreplayers/dashboard-nvim'
+
+"let g:dashboard_default_executive ='fzf'
+"nmap <Leader>ss :<C-u>SessionSave<CR>
+"nmap <Leader>sl :<C-u>SessionLoad<CR>
+"nnoremap <silent> <Leader>fh :History<CR>
+"nnoremap <silent> <Leader>ff :Files<CR>
+"nnoremap <silent> <Leader>tc :Colors<CR>
+"nnoremap <silent> <Leader>fa :Rg<CR>
+"nnoremap <silent> <Leader>fb :Marks<CR>
+
+"let g:dashboard_custom_shortcut={
+  "\ 'last_session'       : 'SPC s l',
+  "\ 'find_history'       : 'SPC f h',
+  "\ 'find_file'          : 'SPC f f',
+  "\ 'change_colorscheme' : 'SPC t c',
+  "\ 'find_word'          : 'SPC f a',
+  "\ 'book_marks'         : 'SPC f b',
+  "\ }
 Plug 'mhinz/vim-startify'
+	 let g:startify_custom_header = [
+		\ '',
+		\ '                                                              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⡴⠞⠉⢉⣭⣿⣿⠿⣳⣤⠴⠖⠛⣛⣿⣿⡷⠖⣶⣤⡀⠀⠀⠀   ',
+		\ '                                                               ⠀⠀⠀⠀⠀⠀⠀⣼⠁⢀⣶⢻⡟⠿⠋⣴⠿⢻⣧⡴⠟⠋⠿⠛⠠⠾⢛⣵⣿⠀⠀⠀⠀  ',
+		\ '                                                               ⣼⣿⡿⢶⣄⠀⢀⡇⢀⡿⠁⠈⠀⠀⣀⣉⣀⠘⣿⠀⠀⣀⣀⠀⠀⠀⠛⡹⠋⠀⠀⠀⠀  ',
+		\ '                                                               ⣭⣤⡈⢑⣼⣻⣿⣧⡌⠁⠀⢀⣴⠟⠋⠉⠉⠛⣿⣴⠟⠋⠙⠻⣦⡰⣞⠁⢀⣤⣦⣤⠀  ',
+		\ '                                                               ⠀⠀⣰⢫⣾⠋⣽⠟⠑⠛⢠⡟⠁⠀⠀⠀⠀⠀⠈⢻⡄⠀⠀⠀⠘⣷⡈⠻⣍⠤⢤⣌⣀  ',
+		\ '                                                               ⢀⡞⣡⡌⠁⠀⠀⠀⠀⢀⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⢿⡀⠀⠀⠀⠸⣇⠀⢾⣷⢤⣬⣉  ',
+		\ '                                                               ⡞⣼⣿⣤⣄⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⣿⠀⠸⣿⣇⠈⠻  ',
+		\ '                                                               ⢰⣿⡿⢹⠃⠀⣠⠤⠶⣼⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⣿⠀⠀⣿⠛⡄⠀  ',
+		\ '                                                               ⠈⠉⠁⠀⠀⠀⡟⡀⠀⠈⡗⠲⠶⠦⢤⣤⣤⣄⣀⣀⣸⣧⣤⣤⠤⠤⣿⣀⡀⠉⣼⡇⠀  ',
+		\ '                                                               ⣿⣴⣴⡆⠀⠀⠻⣄⠀⠀⠡⠀⠀⠀⠈⠛⠋⠀⠀⠀⡈⠀⠻⠟⠀⢀⠋⠉⠙⢷⡿⡇⠀  ',
+		\ '                                                               ⣻⡿⠏⠁⠀⠀⢠⡟⠀⠀⠀⠣⡀⠀⠀⠀⠀⠀⢀⣄⠀⠀⠀⠀⢀⠈⠀⢀⣀⡾⣴⠃⠀  ',
+		\ '                                                               ⢿⠛⠀⠀⠀⠀⢸⠁⠀⠀⠀⠀⠈⠢⠄⣀⠠⠼⣁⠀⡱⠤⠤⠐⠁⠀⠀⣸⠋⢻⡟⠀⠀  ',
+		\ '                                                               ⠈⢧⣀⣤⣶⡄⠘⣆⠀⠀⠀⠀⠀⠀⠀⢀⣤⠖⠛⠻⣄⠀⠀⠀⢀⣠⡾⠋⢀⡞⠀⠀⠀  ',
+		\ '                                                               ⠀⠀⠻⣿⣿⡇⠀⠈⠓⢦⣤⣤⣤⡤⠞⠉⠀⠀⠀⠀⠈⠛⠒⠚⢩⡅⣠⡴⠋⠀⠀⠀⠀  ',
+		\ '                                                               ⠀⠀⠀⠈⠻⢧⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⣻⠿⠋⠀⠀⠀⠀⠀⠀  ',
+		\ '                                                               ⠀⠀⠀⠀⠀⠀⠉⠓⠶⣤⣄⣀⡀⠀⠀⠀⠀⠀⢀⣀⣠⡴⠖⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀  ',
+		\ '                                                                                                  ',
+		\ '',
+		\ ]
+
 "Plug 'makerj/vim-pdf'
+
+" golang
+Plug 'fatih/vim-go' , { 'for': ['go', 'vim-plug'], 'tag': '*' }
 
 call plug#end()
 
@@ -340,8 +392,13 @@ color snazzy
 " ===
 " === vim-airline
 " ===
-let g:airline#extensions#branch#enabled=1
-let g:airline#extensions#hunks#enabled=1
+"let g:airline#extensions#branch#enabled=1
+"let g:airline#extensions#hunks#enabled=1
+
+" ===
+" === vim-eleline
+" ===
+let g:airline_powerline_fonts = 0
 
 " ===
 " === semantic-highlight.
@@ -359,27 +416,6 @@ let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 let g:XkbSwitchEnabled = 1
 
 " ===
-" === NERDTree
-" ===
-noremap ff :NERDTreeToggle<CR>
-
-" ===
-" === NERDTree-Git
-" ===
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ "Unknown"   : "?"
-    \ }
-"let g:NERDTreeShowIgnoredStatus = 1
-
-" ===
 " === Undotree
 " ===
 noremap U :UndotreeToggle<CR>
@@ -393,11 +429,25 @@ let g:undotree_ShortIndicators = 1
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+"let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/', $HOME.'/.config/nvim/plugged/vim-snippets/UltiSnips/']
 
 " ===
-" === Taglist
+" === Vista.vim
 " ===
-map <silent> T :TagbarOpenAutoClose<CR>
+noremap <silent> T :Vista!!<CR>
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'ctags'
+let g:vista_fzf_preview = ['right:50%']
+let g:vista#renderer#enable_icon = 1
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
+function! NearestMethodOrFunction() abort
+	return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+set statusline+=%{NearestMethodOrFunction()}
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
 " ===
 " === Esaymotion
@@ -408,6 +458,21 @@ let g:EasyMotion_do_shade = 0
 let g:EasyMotion_smartcase = 1
 map ' <Plug>(easymotion-bd-f)
 nmap ' <Plug>(easymotion-bd-f)
+
+" ===
+" === Ultisnips
+" ===
+let g:tex_flavor = "latex"
+let g:UltiSnipsExpandTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="<c-k>"
+let g:UltiSnipsJumpBackwardTrigger="<c-j>"
+let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/', $HOME.'/.config/nvim/plugged/vim-snippets/UltiSnips/']
+silent! au BufEnter,BufRead,BufNewFile * silent! unmap <c-r>
+" Solve extreme insert-mode lag on macOS (by disabling autotrigger)
+augroup ultisnips_no_auto_expansion
+    au!
+    au VimEnter * au! UltiSnips_AutoTrigger
+augroup END
 
 " ===
 " === MarkdownPreview
@@ -435,20 +500,14 @@ let g:mkdp_highlight_css = ''
 let g:mkdp_port = ''
 let g:mkdp_page_title = '「${name}」'
 
-" ===
-" === ycm
-" ===
-"let g:ycm_autoclose_preview_window_after_completion=0
-"let g:ycm_autoclose_preview_window_after_insertion=1
-"let g:ycm_use_clangd = 0
-
 " ==
 " == GitGutter
 " ==
+let g:gitgutter_signs = 0
 let g:gitgutter_map_keys = 0
 let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_preview_win_floating = 1
-autocmd BufWritePost * GitGutter
+"autocmd BufWritePost * GitGutter
 nnoremap <LEADER>gf :GitGutterFold<CR>
 nnoremap H :GitGutterPreviewHunk<CR>
 nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
@@ -457,6 +516,7 @@ nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 " ===
 " === coc
 " ===
+let g:coc_global_extensions = ['coc-css', 'coc-vimlsp', 'coc-pyright', 'coc-python', 'coc-html', 'coc-git', 'coc-gitignore', 'coc-lists', 'coc-tsserver','coc-json','coc-yank', 'coc-explorer', 'coc-translator']
 xmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f <Plug>(coc-format-selected)
 " color for coc-diagnostic
@@ -484,6 +544,17 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+nmap ff :CocCommand explorer<CR>
+
+" Open up coc-commands
+nnoremap <c-c> :CocCommand<CR>
+
+" show the yank history
+nnoremap <silent> <space>y :<C-u>CocList -A --normal yank<cr>
+
+" coc-translator
+nmap ts <Plug>(coc-translator-p)
+
 " Use D to show documentation in preview window
 nnoremap <silent> D :call <SID>show_documentation()<CR>
 
@@ -505,6 +576,38 @@ nmap <leader>rn <Plug>(coc-rename)
 " === vim-table-mode
 " ===
 noremap <LEADER>tm :TableModeToggle<CR>
+
+" ===
+" === vim-go
+" ===
+let g:go_def_mapping_enabled = 0
+let g:go_template_autocreate = 0
+let g:go_textobj_enabled = 0
+let g:go_auto_type_info = 1
+"let g:go_def_mapping_enabled = 0
+let g:go_highlight_array_whitespace_error = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_chan_whitespace_error = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_format_strings = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_space_tab_error = 1
+let g:go_highlight_string_spellcheck = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_trailing_whitespace_error = 1
+let g:go_highlight_types = 1
+let g:go_highlight_variable_assignments = 0
+let g:go_highlight_variable_declarations = 0
+let g:go_doc_keywordprg_enabled = 0
+
+"自动import 
+let g:go_fmt_command = "goimports"
 
 " ===
 " === FZF

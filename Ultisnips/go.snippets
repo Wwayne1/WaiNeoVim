@@ -1,0 +1,36 @@
+snippet checke "error check"
+if err != nil{
+	return err
+}
+${0}
+endsnippet
+
+snippet pr "Println"
+fmt.Println(${1})${0}
+endsnippet
+
+snippet golang "Starting code"
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Println("hello")
+}
+endsnippet
+
+snippet funccon "controller func"
+//${1:comment}
+func ${2:controller} (c *gin.Context){
+	service := service.${3:Service}{}
+	if err := c.ShouldBind(&service); err == nil{
+	   res := service.Create()
+	   c.JSON(200, res)
+	} else {
+	   c.JSON(200, ErrorResponse(err))
+	}
+}
+${0}
+endsnippet

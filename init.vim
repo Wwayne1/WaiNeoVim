@@ -12,7 +12,6 @@
 " ====== bugs  =======
 " ====================
 "
-" 执行:source $MYVIMRC<CR> 时coc的reference会实化
 " html文件运行有问题
 
 
@@ -314,7 +313,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Snippets
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " Markdown
@@ -327,23 +326,7 @@ Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 " Mini Vim-APP
 "Plug 'hardcoreplayers/dashboard-nvim'
 
-"let g:dashboard_default_executive ='fzf'
-"nmap <Leader>ss :<C-u>SessionSave<CR>
-"nmap <Leader>sl :<C-u>SessionLoad<CR>
-"nnoremap <silent> <Leader>fh :History<CR>
-"nnoremap <silent> <Leader>ff :Files<CR>
-"nnoremap <silent> <Leader>tc :Colors<CR>
-"nnoremap <silent> <Leader>fa :Rg<CR>
-"nnoremap <silent> <Leader>fb :Marks<CR>
 
-"let g:dashboard_custom_shortcut={
-  "\ 'last_session'       : 'SPC s l',
-  "\ 'find_history'       : 'SPC f h',
-  "\ 'find_file'          : 'SPC f f',
-  "\ 'change_colorscheme' : 'SPC t c',
-  "\ 'find_word'          : 'SPC f a',
-  "\ 'book_marks'         : 'SPC f b',
-  "\ }
 Plug 'mhinz/vim-startify'
 	 let g:startify_custom_header = [
 		\ '',
@@ -423,17 +406,11 @@ let g:undotree_DiffAutoOpen = 1
 let g:undotree_SetFocusWhenToggle = 1
 let g:undotree_ShortIndicators = 1
 
-" ===
-" === Ultisnips
-" ===
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-"let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/', $HOME.'/.config/nvim/plugged/vim-snippets/UltiSnips/']
 
 " ===
 " === Vista.vim
 " ===
+" need to delete macos own ctags and instal universal-ctags
 noremap <silent> T :Vista!!<CR>
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista_default_executive = 'ctags'
@@ -462,17 +439,17 @@ nmap ' <Plug>(easymotion-bd-f)
 " ===
 " === Ultisnips
 " ===
-let g:tex_flavor = "latex"
-let g:UltiSnipsExpandTrigger="<c-k>"
-let g:UltiSnipsJumpForwardTrigger="<c-k>"
-let g:UltiSnipsJumpBackwardTrigger="<c-j>"
-let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/', $HOME.'/.config/nvim/plugged/vim-snippets/UltiSnips/']
-silent! au BufEnter,BufRead,BufNewFile * silent! unmap <c-r>
-" Solve extreme insert-mode lag on macOS (by disabling autotrigger)
-augroup ultisnips_no_auto_expansion
-    au!
-    au VimEnter * au! UltiSnips_AutoTrigger
-augroup END
+"let g:tex_flavor =  "latex
+"let g:UltiSnipsExpandTrigger="<c-k>"
+"let g:UltiSnipsJumpForwardTrigger="<c-k>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-j>"
+"let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/', $HOME.'/.config/nvim/plugged/vim-snippets/UltiSnips/']
+"silent! au BufEnter,BufRead,BufNewFile * silent! unmap <c-r>
+"" Solve extreme insert-mode lag on macOS (by disabling autotrigger)
+"augroup ultisnips_no_auto_expansion
+    "au!
+    "au VimEnter * au! UltiSnips_AutoTrigger
+"augroup END
 
 " ===
 " === MarkdownPreview
@@ -516,7 +493,8 @@ nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 " ===
 " === coc
 " ===
-let g:coc_global_extensions = ['coc-css', 'coc-vimlsp', 'coc-pyright', 'coc-python', 'coc-html', 'coc-git', 'coc-gitignore', 'coc-lists', 'coc-tsserver','coc-json','coc-yank', 'coc-explorer', 'coc-translator']
+let g:coc_global_extensions = ['coc-css', 'coc-vimlsp', 'coc-pyright', 'coc-python', 'coc-html', 'coc-git', 'coc-gitignore', 
+			\ 'coc-lists', 'coc-tsserver','coc-json','coc-yank', 'coc-explorer', 'coc-translator', 'coc-snippets']
 xmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f <Plug>(coc-format-selected)
 " color for coc-diagnostic
@@ -571,6 +549,14 @@ endfunction
 
 " Remap for rename current word 重命名（同时更改所有引用）
 nmap <leader>rn <Plug>(coc-rename)
+
+" coc-snippets
+imap <C-l> <Plug>(coc-snippets-expand)
+vmap <C-j> <Plug>(coc-snippets-select)
+let g:coc_snippet_next = '<c-j>'
+let g:coc_snippet_prev = '<c-k>'
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+let g:snips_author = 'wayne'
 
 " ===
 " === vim-table-mode

@@ -14,7 +14,7 @@
 	"suggest.snippetIndicator": "",
 	"suggest.triggerCompletionWait": 100,
 	"suggest.echodocSupport": true,
-		"suggest.completionItemKindLabels": {
+	"suggest.completionItemKindLabels": {
 		"class": "\uf0e8",
 		"color": "\ue22b",
 		"constant": "\uf8fe",
@@ -59,10 +59,11 @@
 		"html",
 		"css",
 		"python",
-		"dart"
+		"dart",
+		"json"
 	],
 	"signature.target": "float",
-	"yank.enableCompletion" : false,
+	"yank.enableCompletion": false,
 	"explorer.width": 38,
 	"explorer.quitOnOpen": true,
 	"explorer.sources": [
@@ -81,7 +82,7 @@
 	"explorer.file.column.git.showIgnored": true,
 	"explorer.keyMappingMode": "default",
 	"git.enableGutters": true,
-	"git.branchCharacter":"\uf408",
+	"git.branchCharacter": "\uf408",
 	"git.addGBlameToBufferVar": false,
 	"git.addGBlameToVirtualText": false,
 	"git.virtualTextPrefix": " ❯❯❯ ",
@@ -90,9 +91,9 @@
 	"git.removedSign.hlGroup": "GitGutterDelete",
 	"git.topRemovedSign.hlGroup": "GitGutterDelete",
 	"git.changeRemovedSign.hlGroup": "GitGutterChangeDelete",
-	"git.addedSign.text":"▎",
-	"git.changedSign.text":"░",
-	"git.removedSign.text":"▏",
+	"git.addedSign.text": "▎",
+	"git.changedSign.text": "░",
+	"git.removedSign.text": "▏",
 	"git.topRemovedSign.text": "▔",
 	"git.changeRemovedSign.text": "▒",
 	"git.enableGlobalStatus": false,
@@ -109,8 +110,15 @@
 	"languageserver": {
 		"golang": {
 			"command": "gopls",
-			"rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
-			"filetypes": ["go"],
+			"rootPatterns": [
+				"go.mod",
+				".vim/",
+				".git/",
+				".hg/"
+			],
+			"filetypes": [
+				"go"
+			],
 			"initializationOptions": {
 				"gocodeCompletionEnabled": true,
 				"diagnosticsEnabled": true,
@@ -118,25 +126,36 @@
 			}
 		},
 		"ccls": {
-		  "command": "ccls",
-		  "filetypes": ["c", "cpp", "objc", "objcpp"],
-		  "rootPatterns": [".ccls", "compile_commands.json", ".vim/", ".git/", ".hg/"],
-			"initializationOptions": {
-			"cache": {
-			  "directory": "/tmp/ccls"
-			},
-			"clang": {
-			"extraArgs": [
-				"-isystem/usr/local/include",
-				"-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1",
-				"-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include",
-				"-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
-				"-isystem/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
-				"-isystem/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+			"command": "ccls",
+			"filetypes": [
+				"c",
+				"cpp",
+				"objc",
+				"objcpp"
 			],
-			"resourceDir": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0"
+			"rootPatterns": [
+				".ccls",
+				"compile_commands.json",
+				".vim/",
+				".git/",
+				".hg/"
+			],
+			"initializationOptions": {
+				"cache": {
+					"directory": "/tmp/ccls"
+				},
+				"clang": {
+					"extraArgs": [
+						"-isystem/usr/local/include",
+						"-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1",
+						"-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include",
+						"-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+						"-isystem/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
+						"-isystem/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+					],
+					"resourceDir": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0"
+				}
 			}
-		  }
 		}
 	}
 }

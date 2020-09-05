@@ -56,6 +56,10 @@ set showcmd
 set wildmenu
 set autochdir
 
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=100
+
 "再次启动nvim时保存上次推出前的undotree
 silent !mkdir -p ~/.config/nvim/tmp/backup
 silent !mkdir -p ~/.config/nvim/tmp/undo
@@ -72,8 +76,8 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 
 " Compile function
-noremap r :call CompileRunGcc()<CR>
-func! CompileRunGcc()
+noremap r :call CompileRun()<CR>
+func! CompileRun()
 	exec "w"
 	if &filetype == 'c'
 		exec "!g++ % -o %<"
@@ -271,6 +275,7 @@ Plug 'luochen1990/rainbow'
 Plug 'bling/vim-bufferline'
 Plug 'ryanoasis/vim-devicons'
 Plug 'mg979/vim-xtabline'
+Plug 'RRethy/vim-illuminate'
 
 " colors
 "Plug 'connorholyday/vim-snazzy'
@@ -296,6 +301,8 @@ Plug 'easymotion/vim-easymotion'
 Plug 'scrooloose/nerdcommenter' " in <leader>c<space> to comment a block
 Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
 Plug 'jiangmiao/auto-pairs'
+Plug 'lambdalisue/suda.vim' " do stuff like :sudowrite
+Plug 'mg979/vim-visual-multi'
 
 " Genreal Highlighter
 Plug 'jaxbot/semantic-highlight.vim'
@@ -335,6 +342,9 @@ Plug 'mhinz/vim-startify'
 
 " golang
 Plug 'fatih/vim-go' , { 'for': ['go', 'vim-plug'], 'tag': '*' }
+
+" for fun
+Plug 'johngrib/vim-game-snake'
 
 call plug#end()
 
@@ -405,7 +415,14 @@ let g:startify_custom_header = [
 " ===
 " === semantic-highlight.
 " ===
-:nnoremap <Leader>s :SemanticHighlightToggle<cr>
+:nnoremap <Leader>sh :SemanticHighlightToggle<cr>
+
+" ===
+" === vim-illuminate
+" ===
+let g:Illuminate_delay = 750
+hi illuminatedWord cterm=undercurl gui=undercurl
+
 
 " ===
 " === rainbow
@@ -422,6 +439,31 @@ let g:xtabline_settings.enable_persistance = 0
 let g:xtabline_settings.last_open_first = 1
 noremap to :XTabCycleMode<CR>
 noremap \p :echo expand('%:p')<CR>
+
+" ===
+" === suda.vim
+" ===
+cnoreabbrev sudowrite w suda://%
+cnoreabbrev sw w suda://%
+
+" ===
+" === vim-visual-multi
+" ===
+"let g:VM_theme             = 'iceblue'
+"let g:VM_default_mappings = 0
+"let g:VM_leader                     = {'default': ',', 'visual': ',', 'buffer': ','}
+"let g:VM_maps                       = {}
+"let g:VM_custom_motions             = {'n': 'h', 'i': 'l', 'u': 'k', 'e': 'j', 'N': '0', 'I': '$', 'h': 'e'}
+"let g:VM_maps['i']                  = 'k'
+"let g:VM_maps['I']                  = 'K'
+"let g:VM_maps['Find Under']         = '<C-i>'
+"let g:VM_maps['Find Subword Under'] = '<C-i>'
+"let g:VM_maps['Find Next']          = ''
+"let g:VM_maps['Find Prev']          = ''
+"let g:VM_maps['Remove Region']      = 'q'
+"let g:VM_maps['Skip Region']        = '<c-h>'
+"let g:VM_maps["Undo"]               = 'l'
+"let g:VM_maps["Redo"]               = '<C-r>'
 
 " ===
 " === vim-xkbswitch
@@ -525,21 +567,30 @@ nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 " ===
 let g:coc_global_extensions = ['coc-css', 'coc-vimlsp', 'coc-pyright', 'coc-python', 'coc-html', 'coc-git', 'coc-gitignore', 
 			\ 'coc-lists', 'coc-tsserver','coc-json','coc-yank', 'coc-explorer', 'coc-translator', 'coc-snippets']
-xmap <leader>f <Plug>(coc-format-selected)
-nmap <leader>f <Plug>(coc-format-selected)
+
 " color for coc-diagnostic
 hi link CocErrorSign Error
 hi link CocWarningSign ALEWarningSign
-" use <tab> for trigger completion and navigate to the next complete item
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
 function! s:check_back_space() abort
-	let col = col('.') - 1
-	return !col || getline('.')[col - 1]	=~ '\s'
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-inoremap <silent><expr> <Tab>
-			\ pumvisible() ? "\<C-n>" :
-			\ <SID>check_back_space() ? "\<Tab>" :
-			\ coc#refresh()
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+
 inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use `[c` and `]c` to navigate diagnostics
@@ -560,11 +611,8 @@ nnoremap <c-c> :CocCommand<CR>
 " show the yank history
 nnoremap <silent> <space>y :<C-u>CocList -A --normal yank<cr>
 
-" coc-translator
-nmap ts <Plug>(coc-translator-p)
-
-" Use D to show documentation in preview window
-nnoremap <silent> D :call <SID>show_documentation()<CR>
+" Use F to show documentation in preview window
+nnoremap <silent> F :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -574,11 +622,18 @@ function! s:show_documentation()
   endif
 endfunction
 
-" Highlight symbol under cursor on CursorHold 搞不懂干嘛的
-"autocmd CursorHold * silent call CocActionAsync('highlight')
+" Remap for do codeAction of selected region
+function! s:cocActionsOpenFromSelected(type) abort
+  execute 'CocCommand actions.open ' . a:type
+endfunction
+xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 
-" Remap for rename current word 重命名（同时更改所有引用）
+" Remap for rename current word 
 nmap <leader>rn <Plug>(coc-rename)
+
+" coc-translator
+nmap ts <Plug>(coc-translator-p)
 
 " coc-snippets
 imap <C-l> <Plug>(coc-snippets-expand)
@@ -634,7 +689,7 @@ noremap <C-h> :MRU<CR>
 noremap <C-t> :BTags<CR>
 noremap <C-l> :LinesWithPreview<CR>
 noremap <C-w> :Buffers<CR>
-noremap <C-m> :Marks<CR>
+"noremap <C-m> :Marks<CR>
 noremap q; :History:<CR>
 
 autocmd! FileType fzf

@@ -54,6 +54,8 @@ set foldlevel=99
 set wrap              "自动换行
 set showcmd
 set wildmenu
+set ignorecase
+set smartcase
 set autochdir
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
@@ -172,6 +174,7 @@ endif
 " ===
 " Set <LEADER> as <SPACE>
 let mapleader=" "
+noremap ; : 
 
 " Open the vimrc file anytime
 noremap <LEADER>rc :e ~/.config/nvim/init.vim<CR>
@@ -182,6 +185,9 @@ noremap <LEADER>st :Startify<CR>
 " 快速上下移动
 noremap K 5k
 noremap J 5j
+
+" backspace blank
+imap <LEADER><BS> <C-W><C-W>
 
 " Save & quit
 noremap Q :q<CR>
@@ -198,6 +204,7 @@ nnoremap Y y$
 
 " Copy to system clipboard
 vnoremap Y "+y
+nnoremap <C-s> ggvG"+y
 
 " Indentation
 nnoremap < <<
@@ -261,7 +268,13 @@ autocmd BufRead,BufNewFile *.md setlocal spell
 " ===
 
 " Opening a terminal window
-noremap <LEADER>/ :set splitbelow<CR>:sp<CR>:term<CR>
+noremap <LEADER>/ :set splitright<CR>:vsplit<CR>:term<CR>
+
+" Spelling Check with <space>sc
+noremap <LEADER>sc :set spell!<CR>
+
+" Press ` to change case (instead of ~)
+noremap ` ~
 
 " ===
 " === Install Plugins with Vim-Plug
@@ -270,6 +283,7 @@ noremap <LEADER>/ :set splitbelow<CR>:sp<CR>:term<CR>
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'theniceboy/eleline.vim'
+Plug 'ojroques/vim-scrollstatus'
 "Plug 'vim-airline/vim-airline'
 Plug 'luochen1990/rainbow'
 Plug 'bling/vim-bufferline'
@@ -303,6 +317,7 @@ Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to 
 Plug 'jiangmiao/auto-pairs'
 Plug 'lambdalisue/suda.vim' " do stuff like :sudowrite
 Plug 'mg979/vim-visual-multi'
+Plug 'junegunn/goyo.vim'
 
 " Genreal Highlighter
 Plug 'jaxbot/semantic-highlight.vim'
@@ -313,6 +328,7 @@ Plug 'jaxbot/semantic-highlight.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 "Plug 'Xuyuanp/nerdtree-git-plugin'
+"Plug 'pechorin/any-jump.vim'
 
 " Error checking
 "Plug 'fszymanski/fzf-quickfix', {'on': 'Quickfix'}
@@ -334,6 +350,7 @@ Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 
 " Mini Vim-APP
 "Plug 'hardcoreplayers/dashboard-nvim'
+Plug 'itchyny/calendar.vim'
 
 
 Plug 'mhinz/vim-startify'
@@ -415,7 +432,7 @@ let g:startify_custom_header = [
 " ===
 " === semantic-highlight.
 " ===
-:nnoremap <Leader>sh :SemanticHighlightToggle<cr>
+:nnoremap <LEADER>sh :SemanticHighlightToggle<cr>
 
 " ===
 " === vim-illuminate
@@ -465,6 +482,11 @@ cnoreabbrev sw w suda://%
 "let g:VM_maps["Undo"]               = 'l'
 "let g:VM_maps["Redo"]               = '<C-r>'
 
+let g:calendar_google_calendar = 1
+let g:calendar_google_task = 1
+noremap \\ :Calendar -view=clock -position=here<CR>
+
+
 " ===
 " === vim-xkbswitch
 " ===
@@ -507,6 +529,11 @@ let g:EasyMotion_do_shade = 0
 let g:EasyMotion_smartcase = 1
 map ' <Plug>(easymotion-bd-f)
 nmap ' <Plug>(easymotion-bd-f)
+
+" ===
+" === goyo
+" ===
+map <LEADER>gy :Goyo<CR>
 
 " ===
 " === Ultisnips
@@ -561,6 +588,7 @@ nnoremap <LEADER>gf :GitGutterFold<CR>
 nnoremap H :GitGutterPreviewHunk<CR>
 nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
 nnoremap <LEADER>g= :GitGutterNextHunk<CR>
+nnoremap <LEADER>u :GitGutterUndoHunk<CR>
 
 " ===
 " === coc
@@ -626,11 +654,11 @@ endfunction
 function! s:cocActionsOpenFromSelected(type) abort
   execute 'CocCommand actions.open ' . a:type
 endfunction
-xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
-nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
+xmap <silent> <LEADER>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+nmap <silent> <LEADER>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 
 " Remap for rename current word 
-nmap <leader>rn <Plug>(coc-rename)
+nmap <LEADER>rn <Plug>(coc-rename)
 
 " coc-translator
 nmap ts <Plug>(coc-translator-p)
@@ -642,6 +670,22 @@ let g:coc_snippet_next = '<c-j>'
 let g:coc_snippet_prev = '<c-k>'
 imap <C-j> <Plug>(coc-snippets-expand-jump)
 let g:snips_author = 'wayne'
+
+"解决coc.nvim大文件卡死状况
+let g:trigger_size = 0.5 * 1048576
+
+augroup hugefile
+  autocmd!
+  autocmd BufReadPre *
+        \ let size = getfsize(expand('<afile>')) |
+        \ if (size > g:trigger_size) || (size == -2) |
+        \   echohl WarningMsg | echomsg 'WARNING: altering options for this huge file!' | echohl None |
+        \   exec 'CocDisable' |
+        \ else |
+        \   exec 'CocEnable' |
+        \ endif |
+        \ unlet size
+augroup END
 
 " ===
 " === vim-table-mode
@@ -732,6 +776,13 @@ command! -bang BTags
   \                     tail -n +\$(echo {3} | tr -d \";\\\"\") {2} |
   \                     head -n 16"'
   \ })
+
+" ===
+" === any-jump
+" ===
+"nnoremap <leader>d :AnyJump<CR>
+let g:any_jump_window_width_ratio  = 0.8
+let g:any_jump_window_height_ratio = 0.9
 
 " ===
 " === AutoFormat

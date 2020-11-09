@@ -314,6 +314,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'easymotion/vim-easymotion'
 Plug 'scrooloose/nerdcommenter' " in <leader>c<space> to comment a block
 Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
+Plug 'gcmt/wildfire.vim' " in Visual mode, type k' to select all text in '', or type k) k] k} kp
 Plug 'jiangmiao/auto-pairs'
 Plug 'lambdalisue/suda.vim' " do stuff like :sudowrite
 Plug 'mg979/vim-visual-multi'

@@ -1,4 +1,4 @@
-  
+
 " __  ____   __  _   ___     _____ __  __ ____   ____
 "|  \/  \ \ / / | \ | \ \   / /_ _|  \/  |  _ \ / ___|
 "| |\/| |\ V /  |  \| |\ \ / / | || |\/| | |_) | |
@@ -38,39 +38,51 @@ set encoding=utf-8
 syntax on
 set number
 set relativenumber
-set cursorline        "高亮当前行
-set tabstop=4         "缩进长度
+set cursorline
+set hidden
+set noexpandtab
+set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set list              "显示行尾空格
+set autoindent
+set list
 set listchars=tab:\|\ ,trail:▫
-set scrolloff=4       "滚轮滚动行数
+set scrolloff=4
 set ttimeoutlen=0
 set notimeout
 set viewoptions=cursor,folds,slash,unix
-set backspace=indent,eol,start
-set foldmethod=indent "根据缩进折叠代码
+set wrap
+set tw=0
+set indentexpr=
+set foldmethod=indent
 set foldlevel=99
-set wrap              "自动换行
+set foldenable
+set formatoptions-=tc
+set splitright
+set splitbelow
+set noshowmode
 set showcmd
 set wildmenu
 set ignorecase
 set smartcase
-set autochdir
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=100
-
-"再次启动nvim时保存上次推出前的undotree
+set shortmess+=c
+set inccommand=split
+set completeopt=longest,noinsert,menuone,noselect,preview
+set ttyfast "should make scrolling faster
+set lazyredraw "same as above
+set visualbell
 silent !mkdir -p ~/.config/nvim/tmp/backup
 silent !mkdir -p ~/.config/nvim/tmp/undo
+"silent !mkdir -p ~/.config/nvim/tmp/sessions
 set backupdir=~/.config/nvim/tmp/backup,.
 set directory=~/.config/nvim/tmp/backup,.
 if has('persistent_undo')
 	set undofile
 	set undodir=~/.config/nvim/tmp/undo,.
 endif
+set colorcolumn=100
+set updatetime=100
+set virtualedit=block
 
 
 "Cursor save
@@ -181,6 +193,8 @@ noremap <LEADER>rc :e ~/.config/nvim/init.vim<CR>
 
 " Open Startify
 noremap <LEADER>st :Startify<CR>
+
+nnoremap U <C-r>
 
 " 快速上下移动
 noremap K 5k
@@ -309,6 +323,7 @@ Plug 'mbbill/undotree'
 " Git
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'cohama/agit.vim'
 
 " Code Editing
 Plug 'easymotion/vim-easymotion'
@@ -350,11 +365,11 @@ Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 "Plug 'Chiel92/vim-autoformat'
 
 " Mini Vim-APP
-"Plug 'hardcoreplayers/dashboard-nvim'
+Plug 'hardcoreplayers/dashboard-nvim'
 Plug 'itchyny/calendar.vim'
 
 
-Plug 'mhinz/vim-startify'
+"Plug 'mhinz/vim-startify'
 
 "Plug 'makerj/vim-pdf'
 
@@ -496,7 +511,7 @@ let g:XkbSwitchEnabled = 1
 " ===
 " === Undotree
 " ===
-noremap U :UndotreeToggle<CR>
+nnoremap <C-r> :UndotreeToggle<CR>
 let g:undotree_DiffAutoOpen = 1
 let g:undotree_SetFocusWhenToggle = 1
 let g:undotree_ShortIndicators = 1
@@ -592,6 +607,12 @@ nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 nnoremap <LEADER>u :GitGutterUndoHunk<CR>
 
 " ===
+" === Agit
+" ===
+nnoremap <LEADER>gl :Agit<CR>
+let g:agit_no_default_mappings = 1
+
+" ===
 " === coc
 " ===
 let g:coc_global_extensions = ['coc-css', 'coc-vimlsp', 'coc-pyright', 'coc-python', 'coc-html', 'coc-git', 'coc-gitignore', 
@@ -679,7 +700,7 @@ augroup hugefile
   autocmd!
   autocmd BufReadPre *
         \ let size = getfsize(expand('<afile>')) |
-        \ if (size > g:trigger_size) || (size == -2) |
+        \ if (size > g:trigger_size) |
         \   echohl WarningMsg | echomsg 'WARNING: altering options for this huge file!' | echohl None |
         \   exec 'CocDisable' |
         \ else |

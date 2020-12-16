@@ -335,6 +335,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'lambdalisue/suda.vim' " do stuff like :sudowrite
 Plug 'mg979/vim-visual-multi'
 Plug 'junegunn/goyo.vim'
+Plug 'elzr/vim-json'
 
 " Genreal Highlighter
 Plug 'jaxbot/semantic-highlight.vim'

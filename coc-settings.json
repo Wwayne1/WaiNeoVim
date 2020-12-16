@@ -81,6 +81,22 @@
 	"explorer.icon.enableNerdfont": true,
 	"explorer.git.showIgnored": true,
 	"explorer.keyMappingMode": "default",
+	"explorer.keyMappings.global": {
+		"J": [
+			"normal:j",
+			"normal:j",
+			"normal:j",
+			"normal:j",
+			"normal:j"
+		],
+		"K": [
+			"normal:k",
+			"normal:k",
+			"normal:k",
+			"normal:k",
+			"normal:k"
+		]
+	},
 	"git.enableGutters": true,
 	"git.branchCharacter": "\uf408",
 	"git.addGBlameToBufferVar": true,

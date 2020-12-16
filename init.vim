@@ -30,7 +30,7 @@ set mouse=a           "使用鼠标
 set encoding=utf-8
 
 "nvim默认位置
-"cd /Users/wayne/code/golang/src/giligili
+"cd /Users/wayne/code/golang/src
 
 " ===
 " === Editor behavior
@@ -328,7 +328,8 @@ Plug 'cohama/agit.vim'
 " Code Editing
 Plug 'easymotion/vim-easymotion'
 Plug 'scrooloose/nerdcommenter' " in <leader>c<space> to comment a block
-Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
+"Plug 'tpope/vim-surround' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
+Plug 'machakann/vim-sandwich' " type ysks' to wrap the word with '' or type cs'` to change 'word' to `word`
 Plug 'gcmt/wildfire.vim' " in Visual mode, type k' to select all text in '', or type k) k] k} kp
 Plug 'jiangmiao/auto-pairs'
 Plug 'lambdalisue/suda.vim' " do stuff like :sudowrite
@@ -340,21 +341,17 @@ Plug 'jaxbot/semantic-highlight.vim'
 "Plug 'chrisbra/Colorizer' " Show colors with :ColorHighlight
 
 " File navigation
-"Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-"Plug 'Xuyuanp/nerdtree-git-plugin'
 "Plug 'pechorin/any-jump.vim'
 
 " Error checking
 "Plug 'fszymanski/fzf-quickfix', {'on': 'Quickfix'}
 
 " Auto Complete
-"Plug 'Valloric/YouCompleteMe'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Snippets
-"Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " Markdown
@@ -367,11 +364,7 @@ Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 " Mini Vim-APP
 Plug 'hardcoreplayers/dashboard-nvim'
 Plug 'itchyny/calendar.vim'
-
-
 "Plug 'mhinz/vim-startify'
-
-"Plug 'makerj/vim-pdf'
 
 " golang
 Plug 'fatih/vim-go' , { 'for': ['go', 'vim-plug'], 'tag': '*' }
@@ -482,22 +475,6 @@ cnoreabbrev sw w suda://%
 " ===
 " === vim-visual-multi
 " ===
-"let g:VM_theme             = 'iceblue'
-"let g:VM_default_mappings = 0
-"let g:VM_leader                     = {'default': ',', 'visual': ',', 'buffer': ','}
-"let g:VM_maps                       = {}
-"let g:VM_custom_motions             = {'n': 'h', 'i': 'l', 'u': 'k', 'e': 'j', 'N': '0', 'I': '$', 'h': 'e'}
-"let g:VM_maps['i']                  = 'k'
-"let g:VM_maps['I']                  = 'K'
-"let g:VM_maps['Find Under']         = '<C-i>'
-"let g:VM_maps['Find Subword Under'] = '<C-i>'
-"let g:VM_maps['Find Next']          = ''
-"let g:VM_maps['Find Prev']          = ''
-"let g:VM_maps['Remove Region']      = 'q'
-"let g:VM_maps['Skip Region']        = '<c-h>'
-"let g:VM_maps["Undo"]               = 'l'
-"let g:VM_maps["Redo"]               = '<C-r>'
-
 let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
 noremap \\ :Calendar -view=clock -position=here<CR>
